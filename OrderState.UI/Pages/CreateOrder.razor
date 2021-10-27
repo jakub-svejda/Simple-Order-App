@@ -1,0 +1,22 @@
+﻿@page "/new-order"
+
+@inject MongoDbDataAccess da;
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        var order = new OrderModel
+        {
+            Name = "test",
+            Description = "test order",
+            OrderedBy = new ContactModel(),
+            Jobs = new List<JobModel> { new JobModel() },
+            State = OrderState.New
+        };
+        da.InsertRecord<OrderModel>(order);
+    }
+}
