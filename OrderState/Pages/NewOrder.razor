@@ -1,0 +1,16 @@
+﻿@page "/new-order"
+@using OrderState.lib.Models
+@inject OrderState.lib.MongoDbDataAccess da
+<h3>NewOrder</h3>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        var order = new OrderModel();
+        da.InsertRecord(order);
+    }
+}

@@ -1,0 +1,22 @@
+﻿<h3>OrderList</h3>
+@inject MongoDbDataAccess da
+
+<table>
+    <tr>
+        <th>Název</th>
+    </tr>
+    <tr>
+        @foreach (var item in orderList)
+        {
+
+        }
+    </tr>
+</table>
+
+@code {
+    private List<OrderModel> orderList;
+    protected override Task OnInitializedAsync()
+    {
+        orderList = da.LoadRecords<OrderModel>();
+    }
+}
