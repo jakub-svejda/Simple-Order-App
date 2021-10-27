@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderState.UI", "..\OrderState\OrderState.UI\OrderState.UI.csproj", "{EDA35C2C-F692-4D4E-A085-88DD9DF7B595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderState.UI", "OrderState.UI\OrderState.UI.csproj", "{EDA35C2C-F692-4D4E-A085-88DD9DF7B595}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderState.lib", "..\OrderState\OrderState.lib\OrderState.lib.csproj", "{0BDCF31F-51A8-4CE6-84EA-3340AFDC1E1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderState.lib", "OrderState.lib\OrderState.lib.csproj", "{0BDCF31F-51A8-4CE6-84EA-3340AFDC1E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
