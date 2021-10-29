@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrderState.lib
 {
-    public enum OrderState
+    public enum State
     {
         New,
         InProgress,

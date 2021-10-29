@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31727.386
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderState.lib", "OrderState.lib\OrderState.lib.csproj", "{0BDCF31F-51A8-4CE6-84EA-3340AFDC1E1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderState", "OrderState\OrderState.csproj", "{749FDD39-79DF-44E4-BBEA-AECA989BCAE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderState", "OrderState\OrderState.csproj", "{749FDD39-79DF-44E4-BBEA-AECA989BCAE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,80 @@
+﻿@* https://stackoverflow.com/questions/60906486/blazor-inline-editing-table-and-getting-all-component-values-on-event *@
+@inject MongoDbDataAccess da
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Název</th>
+            <th>Popis</th>
+            <th>Celkem</th>
+            <th>Stav</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+
+    @foreach (var instance in Orders)
+    {
+        if (instance.IsEditing)
+        {
+            <tr>
+                <td>
+                    <input type="date" class="form-control" @bind="@instance.DateCreated" />
+                </td>
+                <td>
+                    <input type="text" class="form-control" @bind="@instance.Name" />
+                </td>
+                <td>
+                    <input type="text" class="form-control" @bind="@instance.Description" />
+                </td>
+                <td>
+                    @instance.CalculateTotalPrice()
+                </td>
+                <td>
+                    <input type="text" class="form-control" @bind="@instance.State" /> @*//TODO: combobox*@
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link" @onclick="() => EnableEditing(false, instance)">
+                        close
+                    </button>
+                    <button type="button" class="btn btn-link" @onclick="() => UpdateInstance(instance)">
+                        accept
+                    </button>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>@instance.DateCreated</td>
+                <td>@instance.Name</td>
+                <td>@instance.Description</td>
+                <td>@instance.CalculateTotalPrice()</td>
+                <td>@instance.State</td>
+                <td>
+                    <button type="button" class="btn btn-link" @onclick="() => EnableEditing(true, instance)">
+                        edit
+                    </button>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@code {
+    [Parameter]
+    public IEnumerable<OrderModel> Orders { get; set; }
+
+    private void EnableEditing(bool flag, OrderModel instanceData)
+    {
+        instanceData.IsEditing = flag;
+    }
+
+    private void UpdateInstance(OrderModel instanceData)
+    {
+        EnableEditing(false, instanceData);
+
+        da.UpdateRecord<OrderModel>(instanceData, instanceData.Id);
+
+        //TODO: notification?
+    }
+}

@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,17 @@ namespace OrderState.lib
             var collection = db.GetCollection<T>(table);
 
             collection.InsertOne(record);
+        }
+
+        public void UpdateRecord<T>(T record, ObjectId id)
+        {
+            var collection = db.GetCollection<T>(table);
+
+            var result = collection.ReplaceOne(
+                new BsonDocument("_id", id),
+                record,
+                new ReplaceOptions { IsUpsert = true }
+            );
         }
     }
 }

@@ -41,7 +41,6 @@ namespace OrderState
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
 
             services.AddTransient<MongoDbDataAccess>();
         }
