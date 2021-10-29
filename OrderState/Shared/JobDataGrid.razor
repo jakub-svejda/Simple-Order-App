@@ -1,0 +1,70 @@
+﻿<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Popis</th>
+            <th>Délka</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+
+    @foreach (var instance in Jobs)
+    {
+        if (instance.IsEditing)
+        {
+            <tr>
+                <td>
+                    <input type="text" class="form-control" @bind="@instance.Description" />
+                </td>
+                <td>
+                    <input type="text" class="form-control" @bind="@instance.Hours" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-link" @onclick="() => EnableEditing(false, instance)">
+                        close
+                    </button>
+                    <button type="button" class="btn btn-link" @onclick="() => UpdateInstance(instance)">
+                        accept
+                    </button>
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+
+                <td>@instance.Description</td>
+                <td>@instance.Hours</td>
+                <td>
+                    <button type="button" class="btn btn-link" @onclick="() => EnableEditing(true, instance)">
+                        edit
+                    </button>
+                    <button type="button" class="btn btn-link" @onclick="() => EnableEditing(true, instance)">
+                        delete
+                    </button>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+@code {
+    [Parameter]
+    public List<JobModel> Jobs { get; set; }
+
+    private void EnableEditing(bool flag, JobModel instanceData)
+    {
+        instanceData.IsEditing = flag;
+    }
+
+    private void UpdateInstance(JobModel instanceData)
+    {
+        EnableEditing(false, instanceData);
+
+        //da.UpdateRecord("Orders", instanceData, instanceData.Id);
+    }
+
+    private void DeleteInstance(JobModel instanceData)
+    {
+        Jobs.Remove(instanceData);
+    }
+}

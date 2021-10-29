@@ -1,0 +1,120 @@
+﻿@page "/detail/{OrderId}"
+@using MongoDB.Bson
+@inject MongoDbDataAccess da
+
+<h3>OrderDetail</h3>
+<button class="btn btn-primary" @onclick="SaveChanges">Uložit</button>
+
+@if (selectedOrder != null)
+{
+
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <label>
+                    Název zakázky
+                    <input type="text" class="form-control" @bind="@selectedOrder.Name" />
+                </label>
+                <label>
+                    Sazba
+                    <!--TODO: combo-->
+                </label>
+
+                <label>
+                    Stav zakázky
+                    <!--TODO: combo-->
+                    <input type="text" class="form-control" @bind="@selectedOrder.State" />
+                </label>
+
+                <label>
+                    Zákazník
+                    <select @bind="selectedOrder.CustomerId">
+                        @foreach (var item in customers)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </label>
+
+                <label>
+                    Popis
+                    <input type="text" class="form-control" @bind="@selectedOrder.Description" />
+                </label>
+
+                <label>
+                    Datum fakturace
+                    <input type="date" class="form-control" @bind="@selectedOrder.DateInvoiced" />
+                </label>
+            </div>
+            <div class="col-6">
+                <label>
+                    Datum vytvoření
+                    <input type="text" class="form-control" @bind="@selectedOrder.DateCreated" />
+                </label>
+
+                <label>
+                    Datum uploadu
+                    <input type="text" class="form-control" @bind="@selectedOrder.DateUploaded" />
+                </label>
+
+                <label>
+                    Délka práce [h]
+                    <input type="number" class="form-control" value="@selectedOrder.CalculateTotalHours()" />
+                </label>
+
+                <label>
+                    Cena
+                    <input type="number" class="form-control" value="@selectedOrder.CalculateTotalPrice()" />
+                </label>
+
+                <label>
+                    Url
+                    <input type="url" class="form-control" @bind="@selectedOrder.ExternalUrl" />
+                </label>
+
+                <label>
+                    Url projektu
+                    <input type="url" class="form-control" @bind="@selectedOrder.LocalUrl" />
+                </label>
+
+                <label>
+                    Úkony
+                    <JobDataGrid Jobs="@selectedOrder.Jobs" />
+                    <button class="btn btn-secondary" @onclick="AddJob">Přidat úkon</button>
+                </label>
+            </div>
+        </div><!-- /row -->
+    </div><!-- /container -->
+}
+@code {
+    //https://blazor-university.com/routing/constraining-route-parameters/
+    //https://stackoverflow.com/questions/59299196/how-to-pass-a-url-input-parameter-value-to-blazor-page
+
+    [Parameter]
+    public string OrderId { get; set; }
+
+    private List<CustomerModel> customers;
+
+    private OrderModel selectedOrder;
+
+    private void AddJob()
+    {
+        //TODO: vyvolat job detail (modál?)
+        var job = new JobModel { Description = "New job", Hours = 1 };
+        selectedOrder.Jobs.Add(job);
+    }
+
+    private void SaveChanges()
+    {
+        da.UpdateRecord<OrderModel>("Orders", selectedOrder, ObjectId.Parse(OrderId));
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        selectedOrder = da.LoadRecordById<OrderModel>("Orders", ObjectId.Parse(OrderId));
+
+        customers = da.LoadRecords<CustomerModel>("Customers");
+
+        return base.OnInitializedAsync();
+    }
+}

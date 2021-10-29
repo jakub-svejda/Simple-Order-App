@@ -11,7 +11,7 @@ namespace OrderState.lib.Models
         public string InvoiceNum { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateOfPayment { get; set; }
-        public ContactModel InvoicedTo { get; set; }
+        public CustomerModel InvoicedTo { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

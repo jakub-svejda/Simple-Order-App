@@ -9,6 +9,7 @@ namespace OrderState.lib.Models
     public class JobModel
     {
         public string Description { get; set; }
-        public decimal Hours { get; set; }
+        public double Hours { get; set; }
+        public bool IsEditing { get; set; }
     }
 }

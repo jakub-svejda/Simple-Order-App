@@ -9,9 +9,25 @@ namespace OrderState.lib
 {
     public static class DummyData
     {
-        public static List<OrderModel> CreateDummyData()
+        private static readonly MongoDbDataAccess _da = new MongoDbDataAccess();
+
+        public static void CreateDummyData()
         {
             var output = new List<OrderModel>();
+
+            var customer = new CustomerModel
+            {
+                Name = "TestContact",
+                City = "saaa",
+                Street = "daaa",
+                Cori = "1",
+                Cpop = "2",
+                DIC = "CZ000000",
+                IC = "0000000",
+                PSC = "00000"
+            };
+
+            _da.InsertRecord<CustomerModel>("Customers", customer);
 
             for (int i = 0; i < 5; i++)
             {
@@ -21,17 +37,7 @@ namespace OrderState.lib
                     Description = "test order" + i,
                     LocalUrl = @"C:\asdugfdsjk",
                     State = State.New,
-                    OrderedBy = new ContactModel
-                    {
-                        Name = "TestContact",
-                        City = "saaa",
-                        Street = "daaa",
-                        Cori = "1",
-                        Cpop = "2",
-                        DIC = "CZ000000",
-                        IC = "0000000",
-                        PSC = "00000"
-                    }
+                    CustomerId = customer.Id
                 });
             }
             output.Add(new OrderModel
@@ -40,20 +46,13 @@ namespace OrderState.lib
                 Description = "test ordera",
                 LocalUrl = @"C:\asdugfdsjk",
                 State = State.Paid,
-                OrderedBy = new ContactModel
-                {
-                    Name = "TestContact",
-                    City = "saaa",
-                    Street = "daaa",
-                    Cori = "1",
-                    Cpop = "2",
-                    DIC = "CZ000000",
-                    IC = "0000000",
-                    PSC = "00000"
-                }
+                CustomerId = customer.Id
             });
 
-            return output;
+            foreach (var item in output)
+            {
+                _da.InsertRecord<OrderModel>("Orders", item);
+            }
         }
     }
 }

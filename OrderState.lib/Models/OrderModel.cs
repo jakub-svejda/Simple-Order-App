@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,15 @@ namespace OrderState.lib.Models
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public ContactModel OrderedBy { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string CustomerId { get; set; }
+
         public RateModel Rate { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
-        public DateTime? DateUplaoded { get; set; }
+        public DateTime? DateUploaded { get; set; }
         public State State { get; set; } = State.New;
-        public List<JobModel> Jobs { get; set; }
+        public List<JobModel> Jobs { get; set; } = new();
         public string LocalUrl { get; set; }
         public string ExternalUrl { get; set; }
         public InvoiceModel Invoice { get; set; }
@@ -40,9 +44,26 @@ namespace OrderState.lib.Models
             {
                 foreach (var item in Jobs)
                 {
-                    total += item.Hours * Rate.Rate;
+                    total += (decimal)item.Hours * Rate.Rate;
                 }
 
+                return total;
+            }
+        }
+
+        public double CalculateTotalHours()
+        {
+            if (Jobs is null)
+            {
+                return 0;
+            }
+            else
+            {
+                double total = 0;
+                foreach (var item in Jobs)
+                {
+                    total += item.Hours;
+                }
                 return total;
             }
         }

@@ -12,7 +12,7 @@ namespace OrderState.lib
     {
         private IMongoDatabase db;
 
-        private const string table = "Orders";
+        //private const string table = "Orders";
 
         public MongoDbDataAccess()
         {
@@ -20,24 +20,35 @@ namespace OrderState.lib
             db = client.GetDatabase("OrderState");
         }
 
-        public List<T> LoadRecords<T>()
+        public List<T> LoadRecords<T>(string table)
         {
             var collection = db.GetCollection<T>(table);
 
             return collection.Find(_ => true).ToList();
         }
 
-        public void InsertRecord<T>(T record)
+        public T LoadRecordById<T>(string table, ObjectId id)
+        {
+            var collection = db.GetCollection<T>(table);
+
+            //https://youtu.be/69WBy4MHYUw
+            var filter = Builders<T>.Filter.Eq("Id", id);
+
+            return collection.Find<T>(filter).FirstOrDefault();
+        }
+
+        public void InsertRecord<T>(string table, T record)
         {
             var collection = db.GetCollection<T>(table);
 
             collection.InsertOne(record);
         }
 
-        public void UpdateRecord<T>(T record, ObjectId id)
+        public void UpdateRecord<T>(string table, T record, ObjectId id)
         {
             var collection = db.GetCollection<T>(table);
 
+            //https://youtu.be/69WBy4MHYUw
             var result = collection.ReplaceOne(
                 new BsonDocument("_id", id),
                 record,

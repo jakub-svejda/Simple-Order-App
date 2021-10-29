@@ -5,7 +5,7 @@
 <h3>OrderList</h3>
 <button class="btn btn-primary" @onclick="ShowArchivedOrders">@buttonText</button>
 
-<DataGrid Orders="displayedOrders" />
+<OrderDataGrid Orders="displayedOrders" />
 
 @code {
 
@@ -31,7 +31,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        orderList = da.LoadRecords<OrderModel>();
+        orderList = da.LoadRecords<OrderModel>("Orders");
 
         displayedOrders = orderList.Where(x => x.State != State.Paid).ToList();
 

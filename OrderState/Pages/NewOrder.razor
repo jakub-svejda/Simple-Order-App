@@ -1,5 +1,4 @@
 ﻿@page "/new-order"
-@inject MongoDbDataAccess da
 <h3>NewOrder</h3>
 
 <button class="btn btn-primary" @onclick="CreateDummyData">Create dummy data</button>
@@ -8,9 +7,6 @@
 
     private void CreateDummyData()
     {
-        foreach (var item in DummyData.CreateDummyData())
-        {
-            da.InsertRecord(item);
-        }
+        DummyData.CreateDummyData();
     }
 }

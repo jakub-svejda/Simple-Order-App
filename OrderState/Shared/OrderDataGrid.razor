@@ -3,6 +3,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>Detail</th>
             <th>Datum</th>
             <th>Název</th>
             <th>Popis</th>
@@ -17,6 +18,9 @@
         if (instance.IsEditing)
         {
             <tr>
+                <td>
+                    <a href="/detail/@instance.Id">detail</a>
+                </td>
                 <td>
                     <input type="date" class="form-control" @bind="@instance.DateCreated" />
                 </td>
@@ -45,7 +49,10 @@
         else
         {
             <tr>
-                <td>@instance.DateCreated</td>
+                <td>
+                    <a href="/detail/@instance.Id">detail</a>
+                </td>
+                <td>@instance.DateCreated.ToShortDateString()</td>
                 <td>@instance.Name</td>
                 <td>@instance.Description</td>
                 <td>@instance.CalculateTotalPrice()</td>
@@ -73,7 +80,7 @@
     {
         EnableEditing(false, instanceData);
 
-        da.UpdateRecord<OrderModel>(instanceData, instanceData.Id);
+        da.UpdateRecord<OrderModel>("Orders", instanceData, instanceData.Id);
 
         //TODO: notification?
     }
