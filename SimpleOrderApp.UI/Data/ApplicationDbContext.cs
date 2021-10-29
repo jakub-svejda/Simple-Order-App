@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SimpleOrderApp.Data
+namespace SimpleOrderApp.UI.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

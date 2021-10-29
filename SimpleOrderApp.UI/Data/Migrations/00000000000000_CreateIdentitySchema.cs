@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace SimpleOrderApp.Data.Migrations
+namespace SimpleOrderApp.UI.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

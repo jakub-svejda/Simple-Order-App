@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OrderState.lib\SimpleOrderApp.csproj" />
+    <ProjectReference Include="..\SimpleOrderApp\SimpleOrderApp.csproj" />
   </ItemGroup>
+
 
 </Project>

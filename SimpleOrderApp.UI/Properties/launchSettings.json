@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SimpleOrderApp": {
+    "SimpleOrderApp.UI": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
