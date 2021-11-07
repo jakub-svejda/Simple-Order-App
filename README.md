@@ -1,6 +1,6 @@
 # Simple Order App
 ---- First version in developement ----  
-Simple app for tracking orders made for my personal use. For licence see xx.  
+Simple app for tracking orders (specifically video editting) made for my personal use. If you'd like to use this software, contact me at: jakub.svejda@protonmail.com.
 Features:
 - Tracking orders
   - Create orders (or let your customers create them directly)
