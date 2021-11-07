@@ -14,24 +14,28 @@
 
     private string buttonText = "Archiv";
 
+    private bool archive = false;
+
     private void ShowArchivedOrders()
     {
-        if (displayedOrders.First().State == State.Paid)
+        if (archive)
         {//Displaying archive - change to current
-            displayedOrders = orderList.Where(x => x.State != State.Paid).ToList();
+            displayedOrders = orderList?.Where(x => x.State != State.Paid)?.ToList();
             buttonText = "Archiv";
+            archive = false;
         }
         else
         {//Displaying current - change to archive
-            displayedOrders = orderList.Where(x => x.State == State.Paid).ToList();
+            displayedOrders = orderList?.Where(x => x.State == State.Paid)?.ToList();
             buttonText = "Aktuální";
+            archive = true;
         }
 
     }
 
     protected override Task OnInitializedAsync()
     {
-        orderList = da.LoadRecords<OrderModel>("Orders");
+        orderList = da.LoadRecords<OrderModel>("Orders").Where(x => x.State != State.New).ToList();
 
         displayedOrders = orderList.Where(x => x.State != State.Paid).ToList();
 

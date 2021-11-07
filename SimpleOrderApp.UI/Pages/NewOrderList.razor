@@ -1,0 +1,70 @@
+﻿@page "/new-order-list"
+@* https://stackoverflow.com/questions/60906486/blazor-inline-editing-table-and-getting-all-component-values-on-event *@
+@inject MongoDbDataAccess da
+
+<h1>Příjem zakázek</h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Detail</th>
+            <th>Datum</th>
+            <th>Název</th>
+            <th>Popis</th>
+            <th>Zákazník</th>
+            <th>Podklady(URL)</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+
+    @foreach (var instance in Orders)
+    {
+        <tr>
+            <td>
+                <a href="/detail/@instance.Id">detail</a>
+            </td>
+            <td>@instance.DateCreated.ToShortDateString()</td>
+            <td>@instance.Name</td>
+            <td>@instance.Description</td>
+            <td>@instance.CustomerId</td><!--TODO: zákazník-->
+            <td>@instance.DataUrl</td>
+            <td>
+                <button type="button" class="btn btn-link" @onclick="(() => AcceptOrder(instance))">
+                    accept
+                </button>
+            </td>
+        </tr>
+
+    }
+</table>
+
+@code {
+    //[Parameter]
+    //public IEnumerable<OrderModel> Orders { get; set; }
+
+    private List<OrderModel> Orders = new();
+
+    protected override void OnInitialized()
+    {
+        Orders = da.LoadRecords<OrderModel>("Orders").Where(x => x.State == State.New).ToList();
+    }
+
+    private void AcceptOrder(OrderModel instance)
+    {
+        instance.State = State.Accepted;
+        da.UpdateRecord<OrderModel>("Orders",instance,instance.Id);
+    }
+
+    //private void EnableEditing(bool flag, OrderModel instanceData)
+    //{
+    //    instanceData.IsEditing = flag;
+    //}
+
+    //private void UpdateInstance(OrderModel instanceData)
+    //{
+    //    EnableEditing(false, instanceData);
+
+    //    da.UpdateRecord<OrderModel>("Orders", instanceData, instanceData.Id);
+
+    //    //TODO: notification?
+    //}
+}

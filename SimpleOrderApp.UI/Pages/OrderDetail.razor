@@ -1,9 +1,11 @@
 ﻿@page "/detail/{OrderId}"
 @using MongoDB.Bson
 @inject MongoDbDataAccess da
+@inject NavigationManager NavigationManager
 
 <h3>OrderDetail</h3>
 <button class="btn btn-primary" @onclick="SaveChanges">Uložit</button>
+<button class="btn btn-primary" @onclick="@(() => NavigationManager.NavigateTo("order-list"))">Zpět</button><!--TODO: navigace na callera-->
 
 @if (selectedOrder != null)
 {
@@ -16,8 +18,8 @@
                     <input type="text" class="form-control" @bind="@selectedOrder.Name" />
                 </label>
                 <label>
-                    Sazba
-                    <!--TODO: combo-->
+                    Sazba [Kč/h]
+                    <input type="number" class="form-control" @bind="@selectedOrder.Rate" />
                 </label>
 
                 <label>
@@ -63,27 +65,35 @@
                 </label>
 
                 <label>
-                    Cena
+                    Cena [Kč]
                     <input type="number" class="form-control" value="@selectedOrder.CalculateTotalPrice()" />
                 </label>
 
                 <label>
-                    Url
-                    <input type="url" class="form-control" @bind="@selectedOrder.ExternalUrl" />
+                    Url projektu
+                    <input type="url" class="form-control" @bind="@selectedOrder.DataUrl" />
                 </label>
 
                 <label>
                     Url projektu
-                    <input type="url" class="form-control" @bind="@selectedOrder.LocalUrl" />
+                    <input type="url" class="form-control" @bind="@selectedOrder.LocalProjectUrl" />
                 </label>
 
+                <label>
+                    Url
+                    <input type="url" class="form-control" @bind="@selectedOrder.ResultUrl" />
+                </label>
+            </div>
+        </div><!-- /row -->
+        <div class="row">
+            <div class="col-12">
                 <label>
                     Úkony
                     <JobDataGrid Jobs="@selectedOrder.Jobs" />
                     <button class="btn btn-secondary" @onclick="AddJob">Přidat úkon</button>
                 </label>
             </div>
-        </div><!-- /row -->
+        </div>
     </div><!-- /container -->
 }
 @code {
@@ -102,6 +112,7 @@
         //TODO: vyvolat job detail (modál?)
         var job = new JobModel { Description = "New job", Hours = 1 };
         selectedOrder.Jobs.Add(job);
+        da.UpdateRecord<OrderModel>("Orders", selectedOrder, selectedOrder.Id);
     }
 
     private void SaveChanges()

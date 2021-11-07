@@ -9,6 +9,7 @@ namespace SimpleOrderApp
     public enum State
     {
         New,
+        Accepted,
         InProgress,
         Ready,
         Uploaded,

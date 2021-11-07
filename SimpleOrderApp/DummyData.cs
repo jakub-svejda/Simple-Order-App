@@ -29,13 +29,27 @@ namespace SimpleOrderApp
 
             _da.InsertRecord<CustomerModel>("Customers", customer);
 
+            var customer2 = new CustomerModel
+            {
+                Name = "TestContact2",
+                City = "saaa",
+                Street = "daaa",
+                Cori = "1",
+                Cpop = "2",
+                DIC = "CZ000000",
+                IC = "0000000",
+                PSC = "00000"
+            };
+
+            _da.InsertRecord<CustomerModel>("Customers", customer2);
+
             for (int i = 0; i < 5; i++)
             {
                 output.Add(new OrderModel
                 {
                     Name = "test" + i,
                     Description = "test order" + i,
-                    LocalUrl = @"C:\asdugfdsjk",
+                    LocalProjectUrl = @"C:\asdugfdsjk",
                     State = State.New,
                     CustomerId = customer.Id
                 });
@@ -44,9 +58,9 @@ namespace SimpleOrderApp
             {
                 Name = "testa",
                 Description = "test ordera",
-                LocalUrl = @"C:\asdugfdsjk",
+                LocalProjectUrl = @"C:\asdugfdsjk",
                 State = State.Paid,
-                CustomerId = customer.Id
+                CustomerId = customer2.Id
             });
 
             foreach (var item in output)
