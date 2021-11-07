@@ -1,6 +1,7 @@
 ---- First version in developement ----  
 # Simple Order App
-Simple app for tracking orders (specifically video editting) made for my personal use.
+Simple app for tracking orders and generating invoices.  
+Currently adapted for my use-case (video editing) and language, but can be adapted to your needs with minor changes.
 ## Features:
 - Tracking orders
   - Create orders (or let your customers create them directly)
