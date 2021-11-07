@@ -1,0 +1,21 @@
+﻿@inject MongoDbDataAccess da
+@using MongoDB.Bson
+
+<select @bind="SelectedObject.CustomerId">
+    @foreach (var item in customers)
+    {
+        <option value="@item.Id">@item.Name</option>
+    }
+</select>
+
+@code  {
+    [Parameter]
+    public OrderModel SelectedObject { get; set; }
+
+    private List<CustomerModel> customers;
+    protected override Task OnInitializedAsync()
+    {
+        customers = da.LoadRecords<CustomerModel>("Customers");
+        return base.OnInitializedAsync();
+    }
+}

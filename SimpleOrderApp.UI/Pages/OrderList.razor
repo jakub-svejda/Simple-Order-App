@@ -1,0 +1,45 @@
+﻿@page "/order-list"
+
+@inject MongoDbDataAccess da
+
+<h3>OrderList</h3>
+<button class="btn btn-primary" @onclick="ShowArchivedOrders">@buttonText</button>
+
+<OrderDataGrid Orders="displayedOrders" />
+
+@code {
+
+    private List<OrderModel> displayedOrders;
+    private List<OrderModel> orderList;
+
+    private string buttonText = "Archiv";
+
+    private bool archive = false;
+
+    private void ShowArchivedOrders()
+    {
+        if (archive)
+        {//Displaying archive - change to current
+            displayedOrders = orderList?.Where(x => x.State != State.Paid)?.ToList();
+            buttonText = "Archiv";
+            archive = false;
+        }
+        else
+        {//Displaying current - change to archive
+            displayedOrders = orderList?.Where(x => x.State == State.Paid)?.ToList();
+            buttonText = "Aktuální";
+            archive = true;
+        }
+
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        orderList = da.LoadRecords<OrderModel>("Orders").Where(x => x.State != State.New).ToList();
+
+        displayedOrders = orderList.Where(x => x.State != State.Paid).ToList();
+
+        return base.OnInitializedAsync();
+    }
+
+}

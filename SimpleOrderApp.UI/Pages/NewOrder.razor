@@ -1,0 +1,29 @@
+﻿@page "/new-order"
+@inject MongoDbDataAccess da
+<h3>NewOrder</h3>
+
+<button class="btn btn-primary" @onclick="CreateDummyData">Create dummy data</button>
+
+<EditForm Model="@order" OnSubmit="@FormSubmit">
+    <label>Název: <InputText DisplayName="Name" @bind-Value="order.Name" /></label>
+    <label>Popis: <InputText DisplayName="Popis" @bind-Value="order.Description" /></label>
+    <label>Zákazník: <InputText DisplayName="Name" @bind-Value="order.Name" /></label><!--TODO: combo-->
+    <label>Podklady (URL): <InputText DisplayName="Data" @bind-Value="order.DataUrl" /></label>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</EditForm>
+
+@code {
+
+    private OrderModel order = new();
+
+    private void FormSubmit()
+    {
+        //TODO: validace
+        da.InsertRecord("Orders", order);
+    }
+
+    private void CreateDummyData()
+    {
+        DummyData.CreateDummyData();
+    }
+}
