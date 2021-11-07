@@ -4,29 +4,66 @@
 
 <h3>OrderList</h3>
 <button class="btn btn-primary" @onclick="ShowArchivedOrders">@buttonText</button>
+<button class="btn btn-primary" @onclick="ShowInvoicing">K fakturaci</button>
 
-<OrderDataGrid Orders="displayedOrders" />
+@if (toInvoice)
+{
+    <ToInvoiceDataGrid Orders="GetOrdersToInvoice()" Invoices="GetAllInvoices()" Customers="GetAllCustomers()" />
+}
+else
+{
+    <OrderDataGrid Orders="displayedOrders" />
+}
 
 @code {
 
     private List<OrderModel> displayedOrders;
-    private List<OrderModel> orderList;
+    private List<OrderModel> fullOrderList;
 
     private string buttonText = "Archiv";
 
+    private bool toInvoice = false;
+
     private bool archive = false;
 
+    private void ShowInvoicing()
+    {
+        toInvoice = true;//TODO: dodělat
+    }
+
+    private IEnumerable<InvoiceModel> GetAllInvoices()
+    {
+        var output = new List<InvoiceModel>();
+        foreach (var item in fullOrderList)
+        {
+            if (item.Invoice != null)
+            {
+                output.Add(item.Invoice);
+            }
+        }
+        return output;
+    }
+
+    private IEnumerable<OrderModel> GetOrdersToInvoice()
+    {
+        return displayedOrders.Where(x => x.State == State.Invoiced || x.State == State.Uploaded || x.State == State.Ready);
+    }
+
+    private IEnumerable<CustomerModel> GetAllCustomers()
+    {
+        return da.LoadRecords<CustomerModel>("Customers");
+    }
     private void ShowArchivedOrders()
     {
         if (archive)
         {//Displaying archive - change to current
-            displayedOrders = orderList?.Where(x => x.State != State.Paid)?.ToList();
+            displayedOrders = fullOrderList?.Where(x => x.State != State.Paid)?.ToList();
             buttonText = "Archiv";
             archive = false;
         }
         else
         {//Displaying current - change to archive
-            displayedOrders = orderList?.Where(x => x.State == State.Paid)?.ToList();
+            displayedOrders = fullOrderList?.Where(x => x.State == State.Paid)?.ToList();
             buttonText = "Aktuální";
             archive = true;
         }
@@ -35,9 +72,9 @@
 
     protected override Task OnInitializedAsync()
     {
-        orderList = da.LoadRecords<OrderModel>("Orders").Where(x => x.State != State.New).ToList();
+        fullOrderList = da.LoadRecords<OrderModel>("Orders").Where(x => x.State != State.New).ToList();
 
-        displayedOrders = orderList.Where(x => x.State != State.Paid).ToList();
+        displayedOrders = fullOrderList.Where(x => x.State != State.Paid).ToList();
 
         return base.OnInitializedAsync();
     }

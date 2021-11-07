@@ -1,0 +1,80 @@
+﻿@inject MongoDbDataAccess da
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Detail</th>
+            <th>Datum</th>
+            <th>Název</th>
+            <th>Upload</th>
+            <th>Fakturace</th>
+            <th>Stav</th>
+            <th>Akce</th>
+        </tr>
+    </thead>
+
+    @foreach (var instance in Orders)
+    {
+        <tr>
+            <td>
+                <a href="/detail/@instance.Id">detail</a>
+            </td>
+            <td>@instance.DateCreated.ToShortDateString()</td>
+            <td>@instance.Name</td>
+            <td>@instance.DateUploaded</td>
+            <td>@instance.DateInvoiced</td>
+            <td>@instance.State</td>
+            <td>
+                <button type="button" class="btn btn-link" @onclick="() => CreateInvoice(instance)">
+                    create invoice
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+@code {
+    [Parameter]
+    public IEnumerable<OrderModel> Orders { get; set; }
+
+    [Parameter]
+    public IEnumerable<InvoiceModel> Invoices { get; set; }
+
+    [Parameter]
+    public IEnumerable<CustomerModel> Customers { get; set; }
+
+    private void CreateInvoice(OrderModel instanceData)
+    {
+
+        int maxInvoiceNum = 0;
+
+        foreach (var item in Invoices)
+        {
+            if (item.InvoiceNum > maxInvoiceNum)
+            {
+                maxInvoiceNum = item.InvoiceNum;
+            }
+        }
+
+        if (maxInvoiceNum == 0)
+        {//invoice number contains 4 digit year and then 2-place number (incremented), e.g 202101
+            string year = DateTime.Now.Year.ToString();
+            string num = "01";
+            maxInvoiceNum = int.Parse(year + num);
+        }
+        else
+        {
+            maxInvoiceNum++;
+        }
+
+        var test = new InvoiceModel //TODO: dodělat
+        {
+            TotalPrice = instanceData.CalculateTotalPrice(),
+            InvoicedTo = Customers.Where(x => x.Id == instanceData.CustomerId)?.First(),
+            InvoiceNum = maxInvoiceNum
+        };
+
+        da.UpdateRecord<OrderModel>("Orders", instanceData, instanceData.Id); //TODO: jak udělat update bez injection? delegát?
+
+        //TODO: notification?
+    }
+}

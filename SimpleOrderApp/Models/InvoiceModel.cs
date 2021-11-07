@@ -8,9 +8,9 @@ namespace SimpleOrderApp.Models
 {
     public class InvoiceModel
     {
-        public string InvoiceNum { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateOfPayment { get; set; }
+        public int InvoiceNum { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
+        public DateTime DateOfPayment { get; set; } = DateTime.Now.AddDays(14);
         public CustomerModel InvoicedTo { get; set; }
         public decimal TotalPrice { get; set; }
     }
